@@ -1,0 +1,6 @@
+test:
+  pre:
+    - go get github.com/BurntSushi/toml
+    - go get github.com/gorilla/websocket
+  override:
+    - go test -v ./... -race
