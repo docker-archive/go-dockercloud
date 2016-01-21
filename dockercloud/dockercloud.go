@@ -81,7 +81,7 @@ func LoadAuth() error {
 			}
 		}
 	}
-	return fmt.Errorf("Couldn't find any DockerCloud credentials in ~/.tutum or environment variables DOCKERCLOUD_USER and DOCKERCLOUD_APIKEY")
+	return fmt.Errorf("Couldn't find any DockerCloud credentials in ~/.docker/config.json or environment variables DOCKERCLOUD_USER and DOCKERCLOUD_APIKEY")
 }
 
 func IsAuthenticated() bool {

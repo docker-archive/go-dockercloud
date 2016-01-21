@@ -24,15 +24,15 @@ const (
 func dial() (*websocket.Conn, error) {
 	LoadAuth()
 
-	if os.Getenv("TUTUM_STREAM_HOST") != "" {
-		u, _ := url.Parse(os.Getenv("TUTUM_STREAM_HOST"))
+	if os.Getenv("DOCKERCLOUD_STREAM_HOST") != "" {
+		u, _ := url.Parse(os.Getenv("DOCKERCLOUD_STREAM_HOST"))
 		_, port, _ := net.SplitHostPort(u.Host)
 		if port == "" {
 			u.Host = u.Host + ":443"
 		}
 		StreamUrl = u.Scheme + "://" + u.Host + "/"
-	} else if os.Getenv("TUTUM_STREAM_URL") != "" {
-		u, _ := url.Parse(os.Getenv("TUTUM_STREAM_URL"))
+	} else if os.Getenv("DOCKERCLOUD_STREAM_URL") != "" {
+		u, _ := url.Parse(os.Getenv("DOCKERCLOUD_STREAM_URL"))
 		_, port, _ := net.SplitHostPort(u.Host)
 		if port == "" {
 			u.Host = u.Host + ":443"
@@ -84,7 +84,7 @@ func messagesHandler(ws *websocket.Conn, ticker *time.Ticker, msg Event, c chan 
 			e2 <- err
 			time.Sleep(4 * time.Second)
 		} else {
-			if reflect.TypeOf(msg).String() == "tutum.Event" {
+			if reflect.TypeOf(msg).String() == "dockercloud.Event" {
 				c <- msg
 			}
 		}
