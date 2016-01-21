@@ -17,11 +17,11 @@ func SetUserAgent(name string) string {
 }
 
 func SetBaseUrl() string {
-	if os.Getenv("TUTUM_REST_HOST") != "" {
-		BaseUrl = os.Getenv("TUTUM_REST_HOST")
+	if os.Getenv("DOCKERCLOUD_REST_HOST") != "" {
+		BaseUrl = os.Getenv("DOCKERCLOUD_REST_HOST")
 		BaseUrl = BaseUrl + "/api/"
-	} else if os.Getenv("TUTUM_BASE_URL") != "" {
-		BaseUrl = os.Getenv("TUTUM_BASE_URL")
+	} else if os.Getenv("DOCKERCLOUD_BASE_URL") != "" {
+		BaseUrl = os.Getenv("DOCKERCLOUD_BASE_URL")
 	}
 	return BaseUrl
 }
