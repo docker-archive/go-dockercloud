@@ -20,6 +20,7 @@ const (
 
 var (
 	User       string
+	Password   string
 	ApiKey     string
 	BasicAuth  string
 	AuthHeader string
@@ -27,14 +28,6 @@ var (
 	StreamUrl  = "wss://cloud.docker.com/"
 	version    = "0.21.0"
 )
-
-/*type config map[string]Auth
-
-type Auth struct {
-	User       string
-	Apikey     string
-	Basic_auth string
-}*/
 
 type AuthConfig struct {
 	Auths Config `json:"auths"`
@@ -52,9 +45,14 @@ func LoadAuth() error {
 		sEnc := base64.StdEncoding.EncodeToString([]byte(User + ":" + ApiKey))
 		AuthHeader = fmt.Sprintf("Basic %s", sEnc)
 		return nil
+	}
+	if User != "" && Password != "" {
+		sEnc := base64.StdEncoding.EncodeToString([]byte(User + ":" + Password))
+		AuthHeader = fmt.Sprintf("Basic %s", sEnc)
+		return nil
 	} else {
-		if os.Getenv("TUTUM_AUTH") != "" {
-			AuthHeader = os.Getenv("TUTUM_AUTH")
+		if os.Getenv("DOCKERCLOUD_AUTH") != "" {
+			AuthHeader = os.Getenv("DOCKERCLOUD_AUTH")
 			return nil
 		}
 		// Load environment variables as an alternative option
