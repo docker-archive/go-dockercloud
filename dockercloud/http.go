@@ -31,7 +31,7 @@ func DockerCloudCall(url string, requestType string, requestBody []byte) ([]byte
 	LoadAuth()
 
 	if !IsAuthenticated() {
-		return nil, fmt.Errorf("Couldn't find any DockerCloud credentials in ~/.tutum or environment variables DOCKERCLOUD_USER and DOCKERCLOUD_APIKEY")
+		return nil, fmt.Errorf("Couldn't find any DockerCloud credentials in ~/.docker/config.json or environment variables DOCKERCLOUD_USER and DOCKERCLOUD_APIKEY")
 	}
 
 	BaseUrl = SetBaseUrl()

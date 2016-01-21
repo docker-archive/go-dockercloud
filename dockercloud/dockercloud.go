@@ -51,8 +51,8 @@ func LoadAuth() error {
 		AuthHeader = fmt.Sprintf("Basic %s", sEnc)
 		return nil
 	} else {
-		if os.Getenv("TUTUM_AUTH") != "" {
-			AuthHeader = os.Getenv("TUTUM_AUTH")
+		if os.Getenv("DOCKERCLOUD_AUTH") != "" {
+			AuthHeader = os.Getenv("DOCKERCLOUD_AUTH")
 			return nil
 		}
 		// Load environment variables as an alternative option
