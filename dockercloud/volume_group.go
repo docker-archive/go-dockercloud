@@ -50,7 +50,7 @@ func GetVolumeGroup(uuid string) (VolumeGroup, error) {
 
 	url := ""
 	if string(uuid[0]) == "/" {
-		url = uuid[8:]
+		url = uuid[5:]
 	} else {
 		url = "infra/" + infraSubsytemVersion + "/volumegroup/" + uuid + "/"
 	}

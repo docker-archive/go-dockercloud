@@ -57,7 +57,7 @@ func GetService(uuid string) (Service, error) {
 
 	url := ""
 	if string(uuid[0]) == "/" {
-		url = uuid[8:]
+		url = uuid[5:]
 	} else {
 		url = "app/" + appSubsystemVersion + "/service/" + uuid + "/"
 	}

@@ -48,7 +48,7 @@ func GetImage(name string) (Image, error) {
 
 	url := ""
 	if string(name[0]) == "/" {
-		url = name[8:]
+		url = name[5:]
 	} else {
 		url = "repo/" + repoSubsystemVersion + "/repository/" + name + "/"
 	}

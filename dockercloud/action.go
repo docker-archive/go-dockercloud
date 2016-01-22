@@ -54,7 +54,7 @@ func GetAction(uuid string) (Action, error) {
 
 	url := ""
 	if string(uuid[0]) == "/" {
-		url = uuid[8:]
+		url = uuid[5:]
 	} else {
 		url = "audit/" + auditSubsystemVersion + "/action/" + uuid + "/"
 	}

@@ -49,7 +49,7 @@ func GetVolume(uuid string) (Volume, error) {
 
 	url := ""
 	if string(uuid[0]) == "/" {
-		url = uuid[8:]
+		url = uuid[5:]
 	} else {
 		url = "infra/" + infraSubsytemVersion + "/volume/" + uuid + "/"
 	}

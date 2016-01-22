@@ -50,7 +50,7 @@ func GetRegion(id string) (Region, error) {
 
 	url := ""
 	if string(id[0]) == "/" {
-		url = id[8:]
+		url = id[5:]
 	} else {
 		url = "infra/" + infraSubsytemVersion + "/region/" + id + "/"
 	}
