@@ -186,24 +186,9 @@ type Image struct {
 }
 
 type ImageCreateRequest struct {
-	Name        string `json:"name,omitempty"`
-	Username    string `json:"username,omitempty"`
-	Password    string `json:"password,omitempty"`
-	Description string `json:"description,omitempty"`
-}
-
-type ImageTagsListResponse struct {
-	Meta    Meta        `json:"meta"`
-	Objects []ImageTags `json:"objects"`
-}
-
-type ImageTags struct {
-	Buildable    bool        `json:"buildable"`
-	Full_name    string      `json:"full_name"`
-	Layer        LayerStruct `json:"layer"`
-	Image        string      `json:"image"`
-	Name         string      `json:"name"`
-	Resource_uri string      `json:"resource_uri"`
+	Name     string `json:"name,omitempty"`
+	Username string `json:"username,omitempty"`
+	Password string `json:"password,omitempty"`
 }
 
 type LayerStruct struct {
@@ -497,34 +482,6 @@ type Trigger struct {
 type TriggerCreateRequest struct {
 	Name      string `json:"name"`
 	Operation string `json:"operation"`
-}
-
-type VolumeListResponse struct {
-	Meta    Meta     `json:"meta"`
-	Objects []Volume `json:"objects"`
-}
-
-type Volume struct {
-	Containers   []string `json:"containers"`
-	Node         string   `json:"node"`
-	Resource_uri string   `json:"resource_uri"`
-	State        string   `json:"state"`
-	Uuid         string   `json:"uuid"`
-	Volume_group string   `json:"volume_group"`
-}
-
-type VolumeGroupListResponse struct {
-	Meta    Meta          `json:"meta"`
-	Objects []VolumeGroup `json:"objects"`
-}
-
-type VolumeGroup struct {
-	Name         string   `json:"name"`
-	Resource_uri string   `json:"resource_uri"`
-	Services     []string `json:"services"`
-	State        string   `json:"state"`
-	Uuid         string   `json:"uuid"`
-	Volume       []string `json:"volume"`
 }
 
 type VolumePath struct {
