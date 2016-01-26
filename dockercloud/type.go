@@ -146,12 +146,12 @@ type BuildSource struct {
 	Uuid           string   `json:"uuid"`
 }
 
-type ImageListResponse struct {
-	Meta    Meta         `json:"meta"`
-	Objects []ImageShort `json:"objects"`
+type RepositoryListResponse struct {
+	Meta    Meta              `json:"meta"`
+	Objects []RepositoryShort `json:"objects"`
 }
 
-type ImageShort struct {
+type RepositoryShort struct {
 	Build_Source     string   `json:"build_source"`
 	Description      string   `json:"description"`
 	Icon_url         string   `json:"icon_url"`
@@ -168,7 +168,7 @@ type ImageShort struct {
 	Tags             []string `json:"tags"`
 }
 
-type Image struct {
+type Repository struct {
 	Build_Source     BuildSource `json:"build_source,omitempty"`
 	Description      string      `json:"description"`
 	Icon_url         string      `json:"icon_url"`
@@ -185,25 +185,10 @@ type Image struct {
 	Tags             []string    `json:"tags"`
 }
 
-type ImageCreateRequest struct {
-	Name        string `json:"name,omitempty"`
-	Username    string `json:"username,omitempty"`
-	Password    string `json:"password,omitempty"`
-	Description string `json:"description,omitempty"`
-}
-
-type ImageTagsListResponse struct {
-	Meta    Meta        `json:"meta"`
-	Objects []ImageTags `json:"objects"`
-}
-
-type ImageTags struct {
-	Buildable    bool        `json:"buildable"`
-	Full_name    string      `json:"full_name"`
-	Layer        LayerStruct `json:"layer"`
-	Image        string      `json:"image"`
-	Name         string      `json:"name"`
-	Resource_uri string      `json:"resource_uri"`
+type RepositoryCreateRequest struct {
+	Name     string `json:"name,omitempty"`
+	Username string `json:"username,omitempty"`
+	Password string `json:"password,omitempty"`
 }
 
 type LayerStruct struct {
@@ -497,34 +482,6 @@ type Trigger struct {
 type TriggerCreateRequest struct {
 	Name      string `json:"name"`
 	Operation string `json:"operation"`
-}
-
-type VolumeListResponse struct {
-	Meta    Meta     `json:"meta"`
-	Objects []Volume `json:"objects"`
-}
-
-type Volume struct {
-	Containers   []string `json:"containers"`
-	Node         string   `json:"node"`
-	Resource_uri string   `json:"resource_uri"`
-	State        string   `json:"state"`
-	Uuid         string   `json:"uuid"`
-	Volume_group string   `json:"volume_group"`
-}
-
-type VolumeGroupListResponse struct {
-	Meta    Meta          `json:"meta"`
-	Objects []VolumeGroup `json:"objects"`
-}
-
-type VolumeGroup struct {
-	Name         string   `json:"name"`
-	Resource_uri string   `json:"resource_uri"`
-	Services     []string `json:"services"`
-	State        string   `json:"state"`
-	Uuid         string   `json:"uuid"`
-	Volume       []string `json:"volume"`
 }
 
 type VolumePath struct {

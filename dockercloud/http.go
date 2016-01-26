@@ -20,8 +20,6 @@ func SetBaseUrl() string {
 	if os.Getenv("DOCKERCLOUD_REST_HOST") != "" {
 		BaseUrl = os.Getenv("DOCKERCLOUD_REST_HOST")
 		BaseUrl = BaseUrl + "/api/"
-	} else if os.Getenv("DOCKERCLOUD_BASE_URL") != "" {
-		BaseUrl = os.Getenv("DOCKERCLOUD_BASE_URL")
 	}
 	return BaseUrl
 }
