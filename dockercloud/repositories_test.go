@@ -10,14 +10,15 @@ import (
 	"testing"
 )
 
-func Test_ListVolumes(t *testing.T) {
+func Test_ListRepositories(t *testing.T) {
 	User = "test"
 	ApiKey = "test"
 
-	fake_response, err := MockupResponse("listvolumes.json")
+	fake_response, err := MockupResponse("listimages.json")
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(200)
 		w.Header().Set("Content-Type", "application/json")
@@ -25,7 +26,7 @@ func Test_ListVolumes(t *testing.T) {
 	}))
 
 	defer server.Close()
-	url := server.URL + "/api/infra/" + infraSubsytemVersion + "/volume/"
+	url := server.URL + "/api/repo/" + repoSubsystemVersion + "/repository/"
 
 	res, err := http.Get(url)
 	if err != nil {
@@ -37,7 +38,7 @@ func Test_ListVolumes(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	var response VolumeListResponse
+	var response RepositoryListResponse
 	err = json.Unmarshal(body, &response)
 	if err != nil {
 		t.Fatal(err)
@@ -45,7 +46,7 @@ func Test_ListVolumes(t *testing.T) {
 
 	BaseUrl = server.URL + "/api/"
 
-	test_response, err := ListVolumes()
+	test_response, err := ListRepositories()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -55,11 +56,11 @@ func Test_ListVolumes(t *testing.T) {
 	}
 }
 
-func Test_GetVolume(t *testing.T) {
+func Test_GetRepository(t *testing.T) {
 	User = "test"
 	ApiKey = "test"
 
-	fake_response, err := MockupResponse("volume.json")
+	fake_response, err := MockupResponse("image.json")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -71,7 +72,7 @@ func Test_GetVolume(t *testing.T) {
 	}))
 
 	defer server.Close()
-	url := server.URL + "/api/infra/" + infraSubsytemVersion + "/volume/" + fake_uuid_volume
+	url := server.URL + "/api/repo/" + repoSubsystemVersion + "/repository/" + fake_image_name
 
 	res, err := http.Get(url)
 	if err != nil {
@@ -83,14 +84,14 @@ func Test_GetVolume(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	var response Volume
+	var response Repository
 	err = json.Unmarshal(body, &response)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	BaseUrl = server.URL + "/api/"
-	test_response, err := GetVolume(fake_uuid_volume)
+	test_response, err := GetRepository(fake_image_name)
 	if err != nil {
 		t.Fatal(err)
 	}

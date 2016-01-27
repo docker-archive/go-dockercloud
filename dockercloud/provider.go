@@ -50,7 +50,7 @@ func GetProvider(name string) (Provider, error) {
 
 	url := ""
 	if string(name[0]) == "/" {
-		url = name[8:]
+		url = name[5:]
 	} else {
 		url = "infra/" + infraSubsytemVersion + "/provider/" + name + "/"
 	}

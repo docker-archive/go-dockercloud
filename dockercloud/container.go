@@ -58,7 +58,7 @@ func GetContainer(uuid string) (Container, error) {
 
 	url := ""
 	if string(uuid[0]) == "/" {
-		url = uuid[8:]
+		url = uuid[5:]
 	} else {
 		url = "app/" + appSubsystemVersion + "/container/" + uuid + "/"
 	}

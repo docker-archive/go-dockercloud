@@ -53,7 +53,7 @@ func GetStack(uuid string) (Stack, error) {
 
 	url := ""
 	if string(uuid[0]) == "/" {
-		url = uuid[8:]
+		url = uuid[5:]
 	} else {
 		url = "app/" + appSubsystemVersion + "/stack/" + uuid + "/"
 	}

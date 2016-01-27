@@ -2,13 +2,13 @@ package dockercloud
 
 import "encoding/json"
 
-func ListImages() (ImageListResponse, error) {
+func ListRepositories() (RepositoryListResponse, error) {
 	url := "repo/" + repoSubsystemVersion + "/repository/"
 	request := "GET"
 	//Empty Body Request
 	body := []byte(`{}`)
-	var response ImageListResponse
-	var finalResponse ImageListResponse
+	var response RepositoryListResponse
+	var finalResponse RepositoryListResponse
 
 	data, err := DockerCloudCall(url, request, body)
 	if err != nil {
@@ -24,7 +24,7 @@ func ListImages() (ImageListResponse, error) {
 Loop:
 	for {
 		if response.Meta.Next != "" {
-			var nextResponse ImageListResponse
+			var nextResponse RepositoryListResponse
 			data, err := DockerCloudCall(response.Meta.Next[8:], request, body)
 			if err != nil {
 				return nextResponse, err
@@ -44,11 +44,11 @@ Loop:
 	return finalResponse, nil
 }
 
-func GetImage(name string) (Image, error) {
+func GetRepository(name string) (Repository, error) {
 
 	url := ""
 	if string(name[0]) == "/" {
-		url = name[8:]
+		url = name[5:]
 	} else {
 		url = "repo/" + repoSubsystemVersion + "/repository/" + name + "/"
 	}
@@ -56,7 +56,7 @@ func GetImage(name string) (Image, error) {
 	request := "GET"
 	//Empty Body Request
 	body := []byte(`{}`)
-	var response Image
+	var response Repository
 
 	data, err := DockerCloudCall(url, request, body)
 	if err != nil {
@@ -72,18 +72,18 @@ func GetImage(name string) (Image, error) {
 
 }
 
-func CreateImage(createRequest ImageCreateRequest) (Image, error) {
+func CreateRepository(createRequest RepositoryCreateRequest) (Repository, error) {
 
 	url := "repo/" + repoSubsystemVersion + "/repository/"
 	request := "POST"
-	var response Image
+	var response Repository
 
-	newImage, err := json.Marshal(createRequest)
+	newRepository, err := json.Marshal(createRequest)
 	if err != nil {
 		return response, err
 	}
 
-	data, err := DockerCloudCall(url, request, newImage)
+	data, err := DockerCloudCall(url, request, newRepository)
 	if err != nil {
 		return response, err
 	}
@@ -96,17 +96,17 @@ func CreateImage(createRequest ImageCreateRequest) (Image, error) {
 	return response, nil
 }
 
-func (self *Image) Update(createRequest ImageCreateRequest) error {
+func (self *Repository) Update(createRequest RepositoryCreateRequest) error {
 
 	url := "repo/" + repoSubsystemVersion + "/repository/" + self.Name + "/"
 	request := "PATCH"
 
-	updatedImage, err := json.Marshal(createRequest)
+	updatedRepository, err := json.Marshal(createRequest)
 	if err != nil {
 		return err
 	}
 
-	_, err = DockerCloudCall(url, request, updatedImage)
+	_, err = DockerCloudCall(url, request, updatedRepository)
 	if err != nil {
 		return err
 	}
@@ -114,7 +114,7 @@ func (self *Image) Update(createRequest ImageCreateRequest) error {
 	return nil
 }
 
-func (self *Image) Remove() error {
+func (self *Repository) Remove() error {
 	url := "repo/" + repoSubsystemVersion + "/repository/" + self.Name + "/"
 	request := "DELETE"
 	//Empty Body Request

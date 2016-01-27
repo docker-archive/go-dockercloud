@@ -57,11 +57,10 @@ func GetNode(uuid string) (Node, error) {
 
 	url := ""
 	if string(uuid[0]) == "/" {
-		url = uuid[8:]
+		url = uuid[5:]
 	} else {
 		url = "infra/" + infraSubsytemVersion + "/node/" + uuid + "/"
 	}
-
 	request := "GET"
 	body := []byte(`{}`)
 	var response Node

@@ -49,7 +49,7 @@ func (self *Service) GetTrigger(trigger_uuid string) (Trigger, error) {
 
 	url := ""
 	if string(trigger_uuid[0]) == "/" {
-		url = trigger_uuid[8:]
+		url = trigger_uuid[5:]
 	} else {
 		url = "app/" + appSubsystemVersion + "/service/" + self.Uuid + "/trigger/" + trigger_uuid + "/"
 	}
