@@ -34,7 +34,7 @@ Loop:
 	for {
 		if response.Meta.Next != "" {
 			var nextResponse NodeListResponse
-			data, err := DockerCloudCall(response.Meta.Next[8:], request, body)
+			data, err := DockerCloudCall(response.Meta.Next[5:], request, body)
 			if err != nil {
 				return nextResponse, err
 			}
