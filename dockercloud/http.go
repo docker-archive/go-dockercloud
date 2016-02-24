@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/http/cookiejar"
 	"os"
 )
 
 var customUserAgent = "go-dockercloud/" + version
+var jar http.CookieJar
 
 func SetUserAgent(name string) string {
 	customUserAgent = ""
@@ -24,17 +26,20 @@ func SetBaseUrl() string {
 	return BaseUrl
 }
 
+func init() {
+	BaseUrl = SetBaseUrl()
+	jar, _ = cookiejar.New(nil)
+}
+
 func DockerCloudCall(url string, requestType string, requestBody []byte) ([]byte, error) {
 
 	LoadAuth()
-
 	if !IsAuthenticated() {
 		return nil, fmt.Errorf("Couldn't find any DockerCloud credentials in ~/.docker/config.json or environment variables DOCKERCLOUD_USER and DOCKERCLOUD_APIKEY")
 	}
 
-	BaseUrl = SetBaseUrl()
+	client := &http.Client{Jar: jar}
 
-	client := &http.Client{}
 	req, err := http.NewRequest(requestType, BaseUrl+url, bytes.NewBuffer(requestBody))
 
 	req.Header.Add("Authorization", AuthHeader)
@@ -49,6 +54,8 @@ func DockerCloudCall(url string, requestType string, requestBody []byte) ([]byte
 	if response.StatusCode > 300 {
 		return nil, fmt.Errorf("Failed API call: %s ", response.Status)
 	}
+
+	jar.SetCookies(req.URL, response.Cookies())
 
 	data, err := ioutil.ReadAll(response.Body)
 	if err != nil {
