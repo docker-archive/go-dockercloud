@@ -22,8 +22,6 @@ const (
 )
 
 func dial() (*websocket.Conn, error) {
-	LoadAuth()
-
 	if os.Getenv("DOCKERCLOUD_STREAM_HOST") != "" {
 		u, _ := url.Parse(os.Getenv("DOCKERCLOUD_STREAM_HOST"))
 		_, port, _ := net.SplitHostPort(u.Host)
@@ -55,7 +53,15 @@ func dial() (*websocket.Conn, error) {
 	return ws, nil
 }
 
-func dialHandler(e chan error) *websocket.Conn {
+func dialHandler(e chan error) (*websocket.Conn, error) {
+	if !IsAuthenticated() {
+		err := LoadAuth()
+		if err != nil {
+			e <- err
+			return nil, err
+		}
+	}
+
 	tries := 0
 	for {
 		ws, err := dial()
@@ -67,7 +73,7 @@ func dialHandler(e chan error) *websocket.Conn {
 				e <- err
 			}
 		} else {
-			return ws
+			return ws, nil
 		}
 	}
 }
@@ -94,8 +100,10 @@ func messagesHandler(ws *websocket.Conn, ticker *time.Ticker, msg Event, c chan 
 func Events(c chan Event, e chan error) {
 	var msg Event
 	ticker := time.NewTicker(PING_PERIOD)
-	ws := dialHandler(e)
-
+	ws, err := dialHandler(e)
+	if err != nil {
+		return
+	}
 	e2 := make(chan error)
 
 	defer func() {
