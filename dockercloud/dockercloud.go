@@ -24,7 +24,7 @@ var (
 	ApiKey     string
 	BasicAuth  string
 	AuthHeader string
-	BaseUrl    = "https://cloud.docker.com/"
+	BaseUrl    = "https://cloud.docker.com/api/"
 	StreamUrl  = "wss://cloud.docker.com/"
 	version    = "0.21.0"
 )
@@ -75,7 +75,11 @@ func LoadAuth() error {
 				if err != nil {
 					return err
 				}
-				sEnc := base64.StdEncoding.EncodeToString([]byte(conf.Auths["https://index.docker.io/v1/"].Email + ":" + conf.Auths["https://index.docker.io/v1/"].Auth))
+				auth := conf.Auths["https://index.docker.io/v1/"].Auth
+				if auth == "" {
+					return fmt.Errorf("Couldn't find any DockerCloud credentials in ~/.docker/config.json or environment variables DOCKERCLOUD_USER and DOCKERCLOUD_APIKEY")
+				}
+				sEnc := base64.StdEncoding.EncodeToString([]byte(auth))
 				AuthHeader = fmt.Sprintf("Basic %s", sEnc)
 				return nil
 			}
