@@ -24,7 +24,7 @@ var (
 	ApiKey     string
 	BasicAuth  string
 	AuthHeader string
-	BaseUrl    = "https://cloud.docker.com/"
+	BaseUrl    = "https://cloud.docker.com/api/"
 	StreamUrl  = "wss://cloud.docker.com/"
 	version    = "0.21.0"
 )
