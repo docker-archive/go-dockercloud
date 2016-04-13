@@ -109,6 +109,7 @@ func Events(c chan Event, e chan error) {
 	defer func() {
 		close(c)
 		close(e)
+		close(e2)
 		ws.Close()
 	}()
 	go messagesHandler(ws, ticker, msg, c, e, e2)
@@ -125,6 +126,7 @@ Loop:
 			}
 		case <-e2:
 			ticker.Stop()
+			break Loop
 		}
 	}
 }
