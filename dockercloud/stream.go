@@ -79,6 +79,11 @@ func dialHandler(e chan error) (*websocket.Conn, error) {
 }
 
 func messagesHandler(ws *websocket.Conn, ticker *time.Ticker, msg Event, c chan Event, e chan error, e2 chan error) {
+	defer func() {
+		close(c)
+		close(e)
+		close(e2)
+	}()
 	ws.SetPongHandler(func(string) error {
 		ws.SetReadDeadline(time.Now().Add(PONG_WAIT))
 		return nil
@@ -107,9 +112,6 @@ func Events(c chan Event, e chan error) {
 	e2 := make(chan error)
 
 	defer func() {
-		close(c)
-		close(e)
-		close(e2)
 		ws.Close()
 	}()
 	go messagesHandler(ws, ticker, msg, c, e, e2)
