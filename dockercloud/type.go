@@ -112,12 +112,17 @@ type ContainerPortInfo struct {
 	Protocol   string `json:"protocol"`
 }
 
+type EventErrorMessage struct {
+	ErrorMessage string `json:"errorMessage"`
+}
+
 type Event struct {
-	Type         string   `json:"type"`
-	Action       string   `json:"action"`
-	Parents      []string `json:"parents"`
-	Resource_uri string   `json:"resource_uri"`
-	State        string   `json:"state"`
+	Type         string            `json:"type"`
+	Action       string            `json:"action"`
+	Parents      []string          `json:"parents"`
+	Resource_uri string            `json:"resource_uri"`
+	State        string            `json:"state"`
+	Data         EventErrorMessage `json:"data", omitempty`
 }
 
 type Exec struct {

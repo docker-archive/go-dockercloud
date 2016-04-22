@@ -52,7 +52,7 @@ func DockerCloudCall(url string, requestType string, requestBody []byte) ([]byte
 	}
 
 	if response.StatusCode > 300 {
-		return nil, fmt.Errorf("Failed API call: %s ", response.Status)
+		return nil, fmt.Errorf("Failed API call: %s", response.Status)
 	}
 
 	jar.SetCookies(req.URL, response.Cookies())
