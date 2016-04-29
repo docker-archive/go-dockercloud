@@ -283,12 +283,13 @@ type NodeCluster struct {
 }
 
 type NodeCreateRequest struct {
-	Disk             int       `json:"disk,omitempty"`
-	Name             string    `json:"name,omitempty"`
-	NodeType         string    `json:"node_type,omitempty"`
-	Region           string    `json:"region,omitempty"`
-	Target_num_nodes int       `json:"target_num_nodes,omitempty"`
-	Tags             []NodeTag `json:"tags,omitempty"`
+	Disk             int             `json:"disk,omitempty"`
+	Name             string          `json:"name,omitempty"`
+	NodeType         string          `json:"node_type,omitempty"`
+	Provider_options *ProviderOption `json:"provider_options,omitempty"`
+	Region           string          `json:"region,omitempty"`
+	Target_num_nodes int             `json:"target_num_nodes,omitempty"`
+	Tags             []NodeTag       `json:"tags,omitempty"`
 }
 
 type NodeTypeListResponse struct {
