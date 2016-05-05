@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/http/cookiejar"
 	"os"
@@ -46,7 +47,12 @@ func DockerCloudCall(url string, requestType string, requestBody []byte) ([]byte
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("User-Agent", customUserAgent)
 
+	if Debug == true {
+		log.Printf("req: %s", string(requestBody))
+	}
+
 	response, err := client.Do(req)
+
 	if err != nil {
 		return nil, err
 	}
@@ -58,9 +64,13 @@ func DockerCloudCall(url string, requestType string, requestBody []byte) ([]byte
 	jar.SetCookies(req.URL, response.Cookies())
 
 	data, err := ioutil.ReadAll(response.Body)
+
 	if err != nil {
 		return nil, err
 	}
 
+	if Debug == true {
+		log.Printf("res: %s", string(data))
+	}
 	return data, nil
 }
