@@ -278,7 +278,7 @@ type NodeCluster struct {
 	Name               string         `json:"name"`
 	Nodes              []string       `json:"nodes"`
 	NodeType           string         `json:"node_type"`
-	Provider_options   ProviderOption `json:"provider_options,omitempty"`
+	Provider_options   ProviderOption `json:"provider_options"`
 	Region             string         `json:"region"`
 	Resource_uri       string         `json:"resource_uri"`
 	State              string         `json:"state"`
