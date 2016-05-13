@@ -112,12 +112,17 @@ type ContainerPortInfo struct {
 	Protocol   string `json:"protocol"`
 }
 
+type EventErrorMessage struct {
+	ErrorMessage string `json:"errorMessage"`
+}
+
 type Event struct {
-	Type         string   `json:"type"`
-	Action       string   `json:"action"`
-	Parents      []string `json:"parents"`
-	Resource_uri string   `json:"resource_uri"`
-	State        string   `json:"state"`
+	Type         string            `json:"type"`
+	Action       string            `json:"action"`
+	Parents      []string          `json:"parents"`
+	Resource_uri string            `json:"resource_uri"`
+	State        string            `json:"state"`
+	Data         EventErrorMessage `json:"data", omitempty`
 }
 
 type Exec struct {
@@ -283,13 +288,13 @@ type NodeCluster struct {
 }
 
 type NodeCreateRequest struct {
-	Disk             int            `json:"disk,omitempty"`
-	Name             string         `json:"name,omitempty"`
-	NodeType         string         `json:"node_type,omitempty"`
-	Provider_options ProviderOption `json:"provider_options"`
-	Region           string         `json:"region,omitempty"`
-	Target_num_nodes int            `json:"target_num_nodes,omitempty"`
-	Tags             []NodeTag      `json:"tags,omitempty"`
+	Disk             int             `json:"disk,omitempty"`
+	Name             string          `json:"name,omitempty"`
+	NodeType         string          `json:"node_type,omitempty"`
+	Provider_options *ProviderOption `json:"provider_options,omitempty"`
+	Region           string          `json:"region,omitempty"`
+	Target_num_nodes int             `json:"target_num_nodes,omitempty"`
+	Tags             []NodeTag       `json:"tags,omitempty"`
 }
 
 type NodeTypeListResponse struct {
@@ -407,7 +412,7 @@ type ServiceBinding struct {
 	Container_path string `json:"container_path,omitempty"`
 	Host_path      string `json:"host_path"`
 	Rewritable     bool   `json:"rewritable"`
-	Volumes_from   string `json:"volume_from,omitempty"`
+	Volumes_from   string `json:"volumes_from,omitempty"`
 }
 
 type ServiceCreateRequest struct {
@@ -434,7 +439,7 @@ type ServiceCreateRequest struct {
 }
 
 type ServiceLinkInfo struct {
-	From_service string `json:"from_service"`
+	From_service string `json:"from_service,omitempty"`
 	Name         string `json:"name"`
 	To_service   string `json:"to_service"`
 }
