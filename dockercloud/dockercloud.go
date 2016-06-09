@@ -20,6 +20,7 @@ const (
 
 var (
 	User       string
+	Namespace  string
 	Password   string
 	ApiKey     string
 	BasicAuth  string
@@ -86,6 +87,12 @@ func LoadAuth() error {
 		}
 	}
 	return fmt.Errorf("Couldn't find any DockerCloud credentials in ~/.docker/config.json or environment variables DOCKERCLOUD_USER and DOCKERCLOUD_APIKEY")
+}
+
+func maybeSetNamespace() {
+	if os.Getenv("DOCKERCLOUD_NAMESPACE") != "" {
+		Namespace = os.Getenv("DOCKERCLOUD_NAMESPACE")
+	}
 }
 
 func IsAuthenticated() bool {

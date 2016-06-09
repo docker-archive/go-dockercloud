@@ -27,6 +27,16 @@ Use the docker.cfg file
 
 Set the environment variables DOCKERCLOUD_USER and DOCKERCLOUD_APIKEY
 
+**Namespace:**
+
+In order to access the objects of a specific organization, you need to first set the **Namespace**. As for the authentication there are 2 ways of doing this:
+
+- Manually setting the Namespace in the Go code:
+	
+	dockercloud.Namespace = "yourOrganizationNamespace"
+
+- Set the environment variable DOCKERCLOUD_NAMESPACE
+
 ##Examples
 
 
