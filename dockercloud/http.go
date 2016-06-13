@@ -28,6 +28,7 @@ func SetBaseUrl() string {
 
 func init() {
 	BaseUrl = SetBaseUrl()
+	maybeSetNamespace()
 	jar, _ = cookiejar.New(nil)
 }
 
