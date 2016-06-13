@@ -28,7 +28,7 @@ var (
 	Debug      = false
 	BaseUrl    = "https://cloud.docker.com/api/"
 	StreamUrl  = "wss://ws.cloud.docker.com/"
-	version    = "0.21.0"
+	version    = "1.0.8"
 )
 
 type AuthConfig struct {
