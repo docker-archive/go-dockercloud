@@ -38,7 +38,12 @@ func dial() (*websocket.Conn, *http.Response, error) {
 		StreamUrl = u.Scheme + "://" + u.Host + "/"
 	}
 
-	Url := StreamUrl + "api/audit/" + auditSubsystemVersion + "/events/"
+	Url := ""
+	if Namespace != "" {
+		Url = StreamUrl + "api/audit/" + auditSubsystemVersion + "/" + Namespace + "/events/"
+	} else {
+		Url = StreamUrl + "api/audit/" + auditSubsystemVersion + "/events/"
+	}
 
 	header := http.Header{}
 	header.Add("Authorization", AuthHeader)
