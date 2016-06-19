@@ -95,7 +95,7 @@ if err != nil {
 	log.Println(err)
 }
 
-if err = service.Stop(); err != nil {
+if err = service.StopService(); err != nil {
    log.Println(err)
 }
 ```
