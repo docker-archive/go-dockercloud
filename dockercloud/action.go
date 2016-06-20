@@ -10,13 +10,7 @@ import (
 
 func ListActions() (ActionListResponse, error) {
 
-	url := ""
-
-	if Namespace != "" {
-		url = "audit/" + auditSubsystemVersion + "/" + Namespace + "/action/"
-	} else {
-		url = "audit/" + auditSubsystemVersion + "/action/"
-	}
+	url := "audit/" + auditSubsystemVersion + "/action/"
 
 	request := "GET"
 	//Empty Body Request
@@ -64,11 +58,7 @@ func GetAction(uuid string) (Action, error) {
 	if string(uuid[0]) == "/" {
 		url = uuid[5:]
 	} else {
-		if Namespace != "" {
-			url = "audit/" + auditSubsystemVersion + "/" + Namespace + "/action/" + uuid + "/"
-		} else {
-			url = "audit/" + auditSubsystemVersion + "/action/" + uuid + "/"
-		}
+		url = "audit/" + auditSubsystemVersion + "/action/" + uuid + "/"
 	}
 
 	request := "GET"
@@ -91,12 +81,7 @@ func GetAction(uuid string) (Action, error) {
 
 func (self *Action) GetLogs(c chan Logs) {
 
-	endpoint := ""
-	if Namespace != "" {
-		endpoint = "audit/" + auditSubsystemVersion + "/" + Namespace + "/action/" + self.Uuid + "/logs/?user=" + User + "&token=" + ApiKey
-	} else {
-		endpoint = "audit/" + auditSubsystemVersion + "/action/" + self.Uuid + "/logs/?user=" + User + "&token=" + ApiKey
-	}
+	endpoint := "audit/" + auditSubsystemVersion + "/action/" + self.Uuid + "/logs/?user=" + User + "&token=" + ApiKey
 
 	url := StreamUrl + endpoint
 
@@ -127,11 +112,7 @@ func (self *Action) Cancel() (Action, error) {
 	if string(self.Uuid[0]) == "/" {
 		url = self.Uuid[8:]
 	} else {
-		if Namespace != "" {
-			url = "audit/" + auditSubsystemVersion + "/" + Namespace + "/action/" + self.Uuid + "/cancel/"
-		} else {
-			url = "audit/" + auditSubsystemVersion + "/action/" + self.Uuid + "/cancel/"
-		}
+		url = "audit/" + auditSubsystemVersion + "/action/" + self.Uuid + "/cancel/"
 	}
 
 	request := "POST"
@@ -157,11 +138,7 @@ func (self *Action) Retry() (Action, error) {
 	if string(self.Uuid[0]) == "/" {
 		url = self.Uuid[8:]
 	} else {
-		if Namespace != "" {
-			url = "audit/" + auditSubsystemVersion + "/" + Namespace + "/action/" + self.Uuid + "/retry/"
-		} else {
-			url = "audit/" + auditSubsystemVersion + "/action/" + self.Uuid + "/retry/"
-		}
+		url = "audit/" + auditSubsystemVersion + "/action/" + self.Uuid + "/retry/"
 	}
 
 	request := "POST"
