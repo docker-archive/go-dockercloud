@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"net/http/cookiejar"
 	"net/url"
 	"os"
 	"reflect"
@@ -49,8 +50,15 @@ func dial() (*websocket.Conn, *http.Response, error) {
 	header.Add("Authorization", AuthHeader)
 	header.Add("User-Agent", customUserAgent)
 
-	var Dialer websocket.Dialer
-	return Dialer.Dial(Url, header)
+	Dialer := websocket.Dialer{Jar: DCJar}
+
+	ws, res, err := Dialer.Dial(Url, header)
+
+	return ws, res, err
+}
+
+func init() {
+	DCJar, _ = cookiejar.New(nil)
 }
 
 func dialHandler(e chan error) (*websocket.Conn, error) {
@@ -63,8 +71,10 @@ func dialHandler(e chan error) (*websocket.Conn, error) {
 	}
 
 	tries := 0
+
 	for {
 		ws, resp, err := dial()
+
 		if err != nil {
 			tries++
 			time.Sleep(3 * time.Second)

@@ -122,7 +122,7 @@ type Event struct {
 	Parents      []string          `json:"parents"`
 	Resource_uri string            `json:"resource_uri"`
 	State        string            `json:"state"`
-	Data         EventErrorMessage `json:"data", omitempty`
+	Data         EventErrorMessage `json:"data, omitempty"`
 }
 
 type Exec struct {
