@@ -10,7 +10,7 @@ import (
 )
 
 var customUserAgent = "go-dockercloud/" + version
-var jar http.CookieJar
+var DCJar http.CookieJar
 
 func SetUserAgent(name string) string {
 	customUserAgent = ""
@@ -29,7 +29,7 @@ func SetBaseUrl() string {
 func init() {
 	BaseUrl = SetBaseUrl()
 	maybeSetNamespace()
-	jar, _ = cookiejar.New(nil)
+	DCJar, _ = cookiejar.New(nil)
 }
 
 func DockerCloudCall(url string, requestType string, requestBody []byte) ([]byte, error) {
@@ -39,7 +39,7 @@ func DockerCloudCall(url string, requestType string, requestBody []byte) ([]byte
 			return nil, err
 		}
 	}
-	client := &http.Client{Jar: jar}
+	client := &http.Client{Jar: DCJar}
 
 	req, err := http.NewRequest(requestType, BaseUrl+url, bytes.NewBuffer(requestBody))
 
@@ -61,7 +61,7 @@ func DockerCloudCall(url string, requestType string, requestBody []byte) ([]byte
 		return nil, HttpError{Status: response.Status, StatusCode: response.StatusCode}
 	}
 
-	jar.SetCookies(req.URL, response.Cookies())
+	DCJar.SetCookies(req.URL, response.Cookies())
 
 	data, err := ioutil.ReadAll(response.Body)
 
