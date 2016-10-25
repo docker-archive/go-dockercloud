@@ -110,7 +110,8 @@ dockercloud.StreamUrl = "wss://ws.cloud.docker.com/"
 
 c := make(chan dockercloud.Event)
 e := make(chan error)
-go dockercloud.Events(c, e)
+done := make(chan bool)
+go dockercloud.Events(c, e, done)
 
 for {
 	select {
