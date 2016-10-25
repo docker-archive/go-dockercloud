@@ -106,13 +106,14 @@ if err = service.StopService(); err != nil {
 In order to handle events, you can call the Events function inside a goroutine.
 
 ```
-dockercloud.StreamUrl = "wss://ws.cloud.docker.com/"
-
 c := make(chan dockercloud.Event)
 e := make(chan error)
 done := make(chan bool)
-go dockercloud.Events(c, e, done)
 
+namespace := ""
+filter := &dockercloud.EventFilter{Type: "container"}
+
+go dockercloud.Events(c, e, done, namespace, filter)
 for {
 	select {
 		case event := <-c:

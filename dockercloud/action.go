@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
+	"github.com/docker/go-dockercloud/utils"
 )
 
 func ListActions() (ActionListResponse, error) {
@@ -83,7 +84,7 @@ func (self *Action) GetLogs(c chan Logs) {
 
 	endpoint := "audit/" + auditSubsystemVersion + "/action/" + self.Uuid + "/logs/?user=" + User + "&token=" + ApiKey
 
-	url := StreamUrl + endpoint
+	url := utils.JoinURL(StreamUrl, endpoint, false)
 
 	header := http.Header{}
 	header.Add("User-Agent", customUserAgent)
