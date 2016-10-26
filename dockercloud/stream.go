@@ -115,7 +115,7 @@ func messagesHandler(ws *websocket.Conn, ticker *time.Ticker, msg Event, c chan 
 	}
 }
 
-func Events(c chan Event, e chan error) {
+func Events(c chan Event, e chan error, done chan bool) {
 	var msg Event
 	ticker := time.NewTicker(PING_PERIOD)
 	ws, err := dialHandler(e)
@@ -126,6 +126,8 @@ func Events(c chan Event, e chan error) {
 	e2 := make(chan error)
 
 	defer func() {
+		ticker.Stop()
+		close(done)
 		ws.Close()
 	}()
 	go messagesHandler(ws, ticker, msg, c, e, e2)
@@ -135,13 +137,12 @@ Loop:
 		select {
 		case <-ticker.C:
 			if err := ws.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
-				ticker.Stop()
 				log.Println("Ping Timeout")
 				e <- err
 				break Loop
 			}
 		case <-e2:
-			ticker.Stop()
+		case <-done:
 			break Loop
 		}
 	}
