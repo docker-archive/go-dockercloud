@@ -34,17 +34,22 @@ func init() {
 		}
 	}
 
-	u, _ := url.Parse(streamHost)
-	host, port, _ := net.SplitHostPort(u.Host)
-	if port == "" {
-		if strings.ToLower(u.Scheme) == "wss" {
-			port = "443"
-		} else {
-			port = "80"
+	u, err := url.Parse(streamHost)
+	if err == nil{
+		host, port, err := net.SplitHostPort(u.Host)
+		if err != nil {
+			host = u.Host
 		}
-	}
 
-	StreamUrl = fmt.Sprintf("%s://%s:%s/", u.Scheme, host, port)
+		if port == "" {
+			if strings.ToLower(u.Scheme) == "wss" {
+				port = "443"
+			} else {
+				port = "80"
+			}
+		}
+		StreamUrl = fmt.Sprintf("%s://%s:%s/", u.Scheme, host, port)
+	}
 }
 
 func dial(url string) (*websocket.Conn, *http.Response, error) {
