@@ -32,7 +32,7 @@ Set the environment variables DOCKERCLOUD_USER and DOCKERCLOUD_APIKEY
 In order to access the objects of a specific organization, you need to first set the **Namespace**. As for the authentication there are 2 ways of doing this:
 
 - Manually setting the Namespace in the Go code:
-	
+
 	dockercloud.Namespace = "yourOrganizationNamespace"
 
 - Set the environment variable DOCKERCLOUD_NAMESPACE
@@ -122,10 +122,7 @@ func OnClose() {
 }
 
 func main() {
-    namespace := ""
-    filter := &dockercloud.EventFilter{Type: "container"}
-
-    stream := dockercloud.NewStream(namespace, filter)
+    stream := dockercloud.NewStream()
     stream.OnError(OnError)
     stream.OnMessage(OnMessage)
     // stream.OnConnect(OnConnect)
@@ -141,6 +138,36 @@ func main() {
     } else {
         log.Print("Connect err: " + err.Error())
     }
+
+    // It is possible to initializae a stream with a namespace and filters
+    // namespace and filters are optional arguments
+
+    myNamespace := dockercloud.NewNamespace("mynamespace")
+    namespacedStream := dockercloud.NewStream(myNamespace)
+    ...
+    myFilter := dockercloud.NewStream(&dockercloud.EventFilter{Type: "container"})
+    filteredStream := dockercloud.NewStream(myFilter)
+
+
+    // It is also possible to manually listen to the message and error
+    // channels of the stream
+
+    stream := dockercloud.NewStream()
+    err := stream.Connect()
+
+    if err := stream.Connect(); err == nil {
+    	go stream.RunForever()
+    } else {
+        log.Print("Connect err: " + err.Error())
+    }
+
+	for {
+		select {
+			case msg := <- stream.MessageChan:
+			// handle events
+			case err := <- stream.ErrorChan:
+		}
+	}
 }
 ```
 
