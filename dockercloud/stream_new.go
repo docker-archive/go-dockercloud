@@ -7,9 +7,10 @@ import (
 	"strings"
 	"time"
 
+	"net/url"
+
 	"github.com/docker/go-dockercloud/utils"
 	"github.com/gorilla/websocket"
-	"net/url"
 )
 
 type Stream struct {
@@ -26,15 +27,40 @@ type Stream struct {
 	onClose     func()
 }
 
+type StreamParams struct {
+	Namespace string
+	Filter    *EventFilter
+}
+
 type OnMessageFunc func(*Event)
 type OnErrorFunc func(error)
 type OnConnectFunc func()
 type OnCloseFunc func()
 
-func NewStream(namespace string, filter *EventFilter) *Stream {
+func NewNamespace(namespace string) func(*StreamParams) {
+	optNamespace := func(params *StreamParams) {
+		params.Namespace = namespace
+	}
+	return optNamespace
+}
+
+func NewStreamFilter(filter *EventFilter) func(*StreamParams) {
+	optFilter := func(params *StreamParams) {
+		params.Filter = filter
+	}
+	return optFilter
+}
+
+func NewStream(options ...func(*StreamParams)) *Stream {
+	stream := StreamParams{}
+
+	for _, param := range options {
+		param(&stream)
+	}
+
 	return &Stream{
-		Filter:    filter,
-		Namespace: namespace,
+		Filter:    stream.Filter,
+		Namespace: stream.Namespace,
 	}
 }
 
