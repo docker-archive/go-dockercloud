@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/gorilla/websocket"
 	"github.com/docker/go-dockercloud/utils"
+	"github.com/gorilla/websocket"
 )
 
 func ListContainers() (CListResponse, error) {

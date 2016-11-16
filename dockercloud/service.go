@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/websocket"
 	"github.com/docker/go-dockercloud/utils"
+	"github.com/gorilla/websocket"
 )
 
 func ListServices() (SListResponse, error) {

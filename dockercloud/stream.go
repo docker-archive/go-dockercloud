@@ -24,15 +24,6 @@ const (
 	PING_PERIOD = PONG_WAIT / 2
 )
 
-type StreamConnection struct {
-	ErrorChan   chan error
-	Filter      *EventFilter
-	IsClosed    *bool
-	CloseChan   chan bool
-	MessageChan chan Event
-	Namespace   string
-}
-
 func init() {
 	DCJar, _ = cookiejar.New(nil)
 
@@ -186,26 +177,5 @@ Loop:
 		case <-done:
 			break Loop
 		}
-	}
-}
-
-func InitStreamEventsConnection(namespace string, filter *EventFilter) *StreamConnection {
-	return &StreamConnection{
-		MessageChan: make(chan Event),
-		ErrorChan:   make(chan error),
-		CloseChan:   make(chan bool),
-		IsClosed:    &[]bool{false}[0],
-		Filter:      filter,
-		Namespace:   namespace}
-}
-
-func (streamConn *StreamConnection) StartStreamEvents() {
-	Events(streamConn.MessageChan, streamConn.ErrorChan, streamConn.CloseChan, streamConn.Namespace, streamConn.Filter)
-}
-
-func (streamConn *StreamConnection) CloseStreamEvents() {
-	if *streamConn.IsClosed == false {
-		*streamConn.IsClosed = true
-		streamConn.CloseChan <- true
 	}
 }

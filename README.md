@@ -103,28 +103,46 @@ if err = service.StopService(); err != nil {
 
 **Events**
 
-In order to handle events, you can call the Events function inside a goroutine.
 
 ```
-namespace := ""
-filter := &dockercloud.EventFilter{Type: "container"}
-streamConn := dockercloud.InitStreamEventsConnection(namespace, filter)
+func OnMessage(event *dockercloud.Event) {
+    log.Printf("On Message: %+v: ", event)
+}
 
-go streamConn.StartStreamEvents()
-for {
-	select {
-		case event := <-streamConn.MessageChan:
-			log.Println(event)
-		case err := <-streamConn.ErrorChan:
-			log.Println(err)
-	}
+func OnError(err error) {
+    log.Printf("On Error: %+v: ", err)
+}
+
+func OnConnect() {
+    log.Print("On Connect")
+}
+
+func OnClose() {
+    log.Print("On Close")
+}
+
+func main() {
+    namespace := ""
+    filter := &dockercloud.EventFilter{Type: "container"}
+
+    stream := dockercloud.NewStream(namespace, filter)
+    stream.OnError(OnError)
+    stream.OnMessage(OnMessage)
+    // stream.OnConnect(OnConnect)
+    // stream.OnClose(OnClose)
+
+    go func() {
+        time.Sleep(10 * time.Second)
+        stream.Close()
+    }()
+
+    if err := stream.Connect(); err == nil {
+        stream.RunForever()
+    } else {
+        log.Print("Connect err: " + err.Error())
+    }
 }
 ```
 
-To manually close the event stream, you can simply call:
-
-```
-streamConn.CloseStreamEvents()
-```
 
 The complete API Documentation is available [here](https://docs.docker.com/apidocs/docker-cloud/) with additional examples written in Go.
