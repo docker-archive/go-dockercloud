@@ -145,7 +145,7 @@ func main() {
     myNamespace := dockercloud.NewNamespace("mynamespace")
     namespacedStream := dockercloud.NewStream(myNamespace)
     ...
-    myFilter := dockercloud.NewStream(&dockercloud.EventFilter{Type: "container"})
+    myFilter := dockercloud.NewStreamFilter(&dockercloud.EventFilter{Type: "container"})
     filteredStream := dockercloud.NewStream(myFilter)
 
 
