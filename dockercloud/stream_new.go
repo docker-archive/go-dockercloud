@@ -23,8 +23,8 @@ type Stream struct {
 	ws          *websocket.Conn
 	onMessage   OnMessageFunc
 	onError     OnErrorFunc
-	onConnect   func()
-	onClose     func()
+	onConnect   OnConnectFunc
+	onClose     OnCloseFunc
 }
 
 type StreamParams struct {
@@ -34,8 +34,8 @@ type StreamParams struct {
 
 type OnMessageFunc func(*Event)
 type OnErrorFunc func(error)
-type OnConnectFunc func()
-type OnCloseFunc func()
+type OnConnectFunc func(string)
+type OnCloseFunc func(string)
 
 func NewNamespace(namespace string) func(*StreamParams) {
 	optNamespace := func(params *StreamParams) {
@@ -98,7 +98,7 @@ func (stream *Stream) Connect() error {
 			})
 			stream.ws = ws
 			if stream.onConnect != nil {
-				stream.onConnect()
+				stream.onConnect(stream.Namespace)
 			}
 			return nil
 		}
@@ -122,7 +122,7 @@ func (stream *Stream) RunForever() {
 
 	defer func() {
 		if stream.onClose != nil {
-			stream.onClose()
+			stream.onClose(stream.Namespace)
 		}
 		ticker.Stop()
 		close(stream.closeChan)
@@ -138,19 +138,23 @@ func (stream *Stream) RunForever() {
 				break
 			}
 			err = stream.ws.ReadJSON(&msg)
-			if err != nil && !stream.isClosed {
-				if stream.onError != nil {
-					stream.onError(err)
-				} else {
-					stream.ErrorChan <- err
-				}
-				time.Sleep(3 * time.Second)
-			} else {
-				if reflect.TypeOf(msg).String() == "dockercloud.Event" {
-					if stream.onMessage != nil {
-						stream.onMessage(&msg)
+			if stream.isClosed {
+				break
+			}else {
+				if err != nil {
+					if stream.onError != nil {
+						stream.onError(err)
 					} else {
-						stream.MessageChan <- &msg
+						stream.ErrorChan <- err
+					}
+					time.Sleep(3 * time.Second)
+				} else {
+					if reflect.TypeOf(msg).String() == "dockercloud.Event" {
+						if stream.onMessage != nil {
+							stream.onMessage(&msg)
+						} else {
+							stream.MessageChan <- &msg
+						}
 					}
 				}
 			}

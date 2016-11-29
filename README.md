@@ -103,7 +103,17 @@ if err = service.StopService(); err != nil {
 
 **Events**
 
+Initialize event stream with namespace and Filters:
+```
+    myNamespace := dockercloud.NewNamespace("mynamespace")
+    myFilter := dockercloud.NewStreamFilter(&dockercloud.EventFilter{Type: "container"})
 
+    stream := dockercloud.NewStream(myNamespace)
+    stream := dockercloud.NewStream(myFilter)
+    stream := dockercloud.NewStream(myNamespace, myFilter)
+```
+
+Usage:
 ```
 func OnMessage(event *dockercloud.Event) {
     log.Printf("On Message: %+v: ", event)
@@ -113,12 +123,12 @@ func OnError(err error) {
     log.Printf("On Error: %+v: ", err)
 }
 
-func OnConnect() {
-    log.Print("On Connect")
+func OnConnect(namespace string) {
+    log.Printf("On Connect: Stream %s", namespace)
 }
 
-func OnClose() {
-    log.Print("On Close")
+func OnClose(namespace string) {
+    log.Printf("On Close: Stream %s", namespace)
 }
 
 func main() {
@@ -138,20 +148,10 @@ func main() {
     } else {
         log.Print("Connect err: " + err.Error())
     }
+```
 
-    // It is possible to initializae a stream with a namespace and filters
-    // namespace and filters are optional arguments
-
-    myNamespace := dockercloud.NewNamespace("mynamespace")
-    namespacedStream := dockercloud.NewStream(myNamespace)
-    ...
-    myFilter := dockercloud.NewStreamFilter(&dockercloud.EventFilter{Type: "container"})
-    filteredStream := dockercloud.NewStream(myFilter)
-
-
-    // It is also possible to manually listen to the message and error
-    // channels of the stream
-
+Alternatively, you can use channels to handle messages and errors
+```
     stream := dockercloud.NewStream()
     err := stream.Connect()
 
@@ -164,8 +164,9 @@ func main() {
 	for {
 		select {
 			case msg := <- stream.MessageChan:
-			// handle events
+                log.Printf("%+v", msg)
 			case err := <- stream.ErrorChan:
+			    log.Printf("%+v", err)
 		}
 	}
 }
