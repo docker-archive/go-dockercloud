@@ -17,6 +17,7 @@ type Stream struct {
 	ErrorChan   chan error
 	Filter      *EventFilter
 	isClosed    bool
+	ToClose     bool
 	closeChan   chan bool
 	MessageChan chan *Event
 	Namespace   string
@@ -177,6 +178,7 @@ Loop:
 }
 
 func (stream *Stream) Close() {
+	stream.ToClose = true
 	if stream.isClosed == false && stream.ws != nil {
 		stream.isClosed = true
 		stream.closeChan <- true
