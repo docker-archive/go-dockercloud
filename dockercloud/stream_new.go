@@ -179,6 +179,10 @@ Loop:
 
 func (stream *Stream) Close() {
 	stream.ToClose = true
+	stream.Exit()
+}
+
+func (stream *Stream) Exit() {
 	if stream.isClosed == false && stream.ws != nil {
 		stream.isClosed = true
 		stream.closeChan <- true
