@@ -84,8 +84,10 @@ func (stream *Stream) Connect() error {
 	for {
 		ws, resp, err := dial(eventUrl)
 		if err != nil {
-			if resp.StatusCode == 401 {
-				return HttpError{Status: resp.Status, StatusCode: resp.StatusCode}
+			if resp != nil {
+				if resp.StatusCode == 401 {
+					return HttpError{Status: resp.Status, StatusCode: resp.StatusCode}
+				}
 			}
 			if tries > 10 {
 				return fmt.Errorf("[DIAL ERROR]: %s", err.Error())
@@ -141,7 +143,7 @@ func (stream *Stream) RunForever() {
 			err = stream.ws.ReadJSON(&msg)
 			if stream.isClosed {
 				break
-			}else {
+			} else {
 				if err != nil {
 					if stream.onError != nil {
 						stream.onError(err)
