@@ -117,6 +117,7 @@ func messagesHandler(ws *websocket.Conn, ticker *time.Ticker, msg Event, c chan 
 }
 
 func Events(c chan Event, e chan error, done chan bool, namespace string, filter *EventFilter) {
+	log.Print("This event API is deprecated, please use the new Stream API instead.")
 	if namespace == "" {
 		namespace = Namespace
 	}
