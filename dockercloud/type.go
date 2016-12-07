@@ -409,10 +409,10 @@ type Service struct {
 }
 
 type ServiceBinding struct {
-	Container_path string `json:"container_path"`
+	Container_path string `json:"container_path,omitempty"`
 	Host_path      string `json:"host_path"`
 	Rewritable     bool   `json:"rewritable"`
-	Volumes_from   string `json:"volumes_from"`
+	Volumes_from   string `json:"volumes_from,omitempty"`
 }
 
 type ServiceCreateRequest struct {
