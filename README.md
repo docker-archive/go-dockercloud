@@ -103,17 +103,41 @@ if err = service.StopService(); err != nil {
 
 **Events**
 
-Initialize event stream with namespace and Filters:
-```
-    myNamespace := dockercloud.NewNamespace("mynamespace")
-    myFilter := dockercloud.NewStreamFilter(&dockercloud.EventFilter{Type: "container"})
+Initialize event stream with namespace and/or filters:
 
-    stream := dockercloud.NewStream(myNamespace)
-    stream := dockercloud.NewStream(myFilter)
-    stream := dockercloud.NewStream(myNamespace, myFilter)
+```
+myNamespace := dockercloud.NewNamespace("mynamespace")
+myFilter := dockercloud.NewStreamFilter(&dockercloud.EventFilter{Type: "container"})
+
+// Stream that only listens for events in the namespace "mynamespace"
+stream := dockercloud.NewStream(myNamespace)
+
+// Stream that only listens for events of type container 
+stream := dockercloud.NewStream(myFilter)
+
+// Stream that only listens for events of type container in the namespace "mynamespace"
+stream := dockercloud.NewStream(myNamespace, myFilter)
+```
+
+The filters available are:
+
+- Type: filter by type: service, container, action, node, etc
+- Object: filter by object resource URI
+- Parents: filter by object parents
+
+
+Note: You can specify multiple `Object` or `Type` filters:
+
+```
+// Stream that only listens for events of type container, action or node
+myFilterTypes := dockercloud.NewStreamFilter(&dockercloud.EventFilter{Type: "container,action,node"})
+
+//
+myFilterObjects := dockercloud.NewStreamFilter(&dockercloud.EventFilter{Object: ",action,node"})
 ```
 
 Usage:
+
 ```
 func OnMessage(event *dockercloud.Event) {
     log.Printf("On Message: %+v: ", event)
@@ -151,26 +175,28 @@ func main() {
 ```
 
 Alternatively, you can use channels to handle messages and errors
+
 ```
-    stream := dockercloud.NewStream()
-    err := stream.Connect()
+stream := dockercloud.NewStream()
+err := stream.Connect()
 
-    if err := stream.Connect(); err == nil {
-    	go stream.RunForever()
-    } else {
-        log.Print("Connect err: " + err.Error())
-    }
+if err := stream.Connect(); err == nil {
+	go stream.RunForever()
+} else {
+    log.Print("Connect err: " + err.Error())
+}
 
-	for {
-		select {
-			case msg := <- stream.MessageChan:
-                log.Printf("%+v", msg)
-			case err := <- stream.ErrorChan:
-			    log.Printf("%+v", err)
-		}
+for {
+	select {
+		case msg := <- stream.MessageChan:
+            log.Printf("%+v", msg)
+		case err := <- stream.ErrorChan:
+		    log.Printf("%+v", err)
 	}
 }
 ```
+Note: The previous implentation of stream events is still supported by this version of the SDK
 
+---
 
 The complete API Documentation is available [here](https://docs.docker.com/apidocs/docker-cloud/) with additional examples written in Go.
