@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/docker/go-dockercloud/utils"
 	"github.com/gorilla/websocket"
 )
 
@@ -97,7 +98,7 @@ func (self *Container) Logs(c chan Logs) {
 	} else {
 		endpoint = "api/app/" + appSubsystemVersion + "/container/" + self.Uuid + "/logs/"
 	}
-	url := StreamUrl + endpoint
+	url := utils.JoinURL(StreamUrl, endpoint, false)
 
 	header := http.Header{}
 	header.Add("Authorization", AuthHeader)
@@ -143,7 +144,7 @@ func (self *Container) Run(command string, c chan Exec) {
 	} else {
 		endpoint = "app/" + appSubsystemVersion + "/container/" + self.Uuid + "/exec/?user=" + User + "&token=" + ApiKey + "&command=" + url.QueryEscape(command)
 	}
-	url := StreamUrl + endpoint
+	url := utils.JoinURL(StreamUrl, endpoint, false)
 
 	header := http.Header{}
 	header.Add("User-Agent", customUserAgent)

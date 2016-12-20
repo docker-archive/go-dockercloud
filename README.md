@@ -32,7 +32,7 @@ Set the environment variables DOCKERCLOUD_USER and DOCKERCLOUD_APIKEY
 In order to access the objects of a specific organization, you need to first set the **Namespace**. As for the authentication there are 2 ways of doing this:
 
 - Manually setting the Namespace in the Go code:
-	
+
 	dockercloud.Namespace = "yourOrganizationNamespace"
 
 - Set the environment variable DOCKERCLOUD_NAMESPACE
@@ -103,24 +103,100 @@ if err = service.StopService(); err != nil {
 
 **Events**
 
-In order to handle events, you can call the Events function inside a goroutine.
+Initialize event stream with namespace and/or filters:
 
 ```
-dockercloud.StreamUrl = "wss://ws.cloud.docker.com/"
+myNamespace := dockercloud.NewNamespace("mynamespace")
+myFilter := dockercloud.NewStreamFilter(&dockercloud.EventFilter{Type: "container"})
 
-c := make(chan dockercloud.Event)
-e := make(chan error)
-done := make(chan bool)
-go dockercloud.Events(c, e, done)
+// Stream that only listens for events in the namespace "mynamespace"
+stream := dockercloud.NewStream(myNamespace)
+
+// Stream that only listens for events of type container 
+stream := dockercloud.NewStream(myFilter)
+
+// Stream that only listens for events of type container in the namespace "mynamespace"
+stream := dockercloud.NewStream(myNamespace, myFilter)
+```
+
+The filters available are:
+
+- Type: filter by type: service, container, action, node, etc
+- Object: filter by object resource URI
+- Parents: filter by object parents
+
+
+Note: You can specify multiple `Object` or `Type` filters:
+
+```
+// Stream that only listens for events of type container, action or node
+myFilterTypes := dockercloud.NewStreamFilter(&dockercloud.EventFilter{Type: "container,action,node"})
+
+//
+myFilterObjects := dockercloud.NewStreamFilter(&dockercloud.EventFilter{Object: ",action,node"})
+```
+
+Usage:
+
+```
+func OnMessage(event *dockercloud.Event) {
+    log.Printf("On Message: %+v: ", event)
+}
+
+func OnError(err error) {
+    log.Printf("On Error: %+v: ", err)
+}
+
+func OnConnect(namespace string) {
+    log.Printf("On Connect: Stream %s", namespace)
+}
+
+func OnClose(namespace string) {
+    log.Printf("On Close: Stream %s", namespace)
+}
+
+func main() {
+    stream := dockercloud.NewStream()
+    stream.OnError(OnError)
+    stream.OnMessage(OnMessage)
+    // stream.OnConnect(OnConnect)
+    // stream.OnClose(OnClose)
+
+    go func() {
+        time.Sleep(10 * time.Second)
+        stream.Close()
+    }()
+
+    if err := stream.Connect(); err == nil {
+        stream.RunForever()
+    } else {
+        log.Print("Connect err: " + err.Error())
+    }
+```
+
+Alternatively, you can use channels to handle messages and errors
+
+```
+stream := dockercloud.NewStream()
+err := stream.Connect()
+
+if err := stream.Connect(); err == nil {
+	go stream.RunForever()
+} else {
+    log.Print("Connect err: " + err.Error())
+}
 
 for {
 	select {
-		case event := <-c:
-			log.Println(event)
-		case err := <-e:
-			log.Println(err)
+		case msg := <- stream.MessageChan:
+            log.Printf("%+v", msg)
+		case err := <- stream.ErrorChan:
+		    log.Printf("%+v", err)
 	}
 }
 ```
+Note: The previous implentation of stream events is still supported by this version of the SDK
+
+---
 
 The complete API Documentation is available [here](https://docs.docker.com/apidocs/docker-cloud/) with additional examples written in Go.

@@ -493,3 +493,9 @@ type TriggerCreateRequest struct {
 type VolumePath struct {
 	Container_path string `json:"container_path"`
 }
+
+type EventFilter struct {
+	Object  string
+	Type    string
+	Parents []string
+}

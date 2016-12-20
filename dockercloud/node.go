@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/docker/go-dockercloud/utils"
 	"github.com/gorilla/websocket"
 )
 
@@ -163,7 +164,7 @@ func (self *Node) Events(c chan NodeEvent) {
 		endpoint = "infra/" + infraSubsytemVersion + "/node/" + self.Uuid + "/events/?user=" + User + "&token=" + ApiKey
 	}
 
-	url := StreamUrl + endpoint
+	url := utils.JoinURL(StreamUrl, endpoint, false)
 
 	header := http.Header{}
 	header.Add("User-Agent", customUserAgent)

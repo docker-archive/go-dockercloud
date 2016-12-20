@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/docker/go-dockercloud/utils"
 	"github.com/gorilla/websocket"
 )
 
@@ -129,7 +130,7 @@ func (self *Service) Logs(c chan Logs) {
 		endpoint = "api/app/" + appSubsystemVersion + "/service/" + self.Uuid + "/logs/"
 	}
 
-	url := StreamUrl + endpoint
+	url := utils.JoinURL(StreamUrl, endpoint, false)
 
 	header := http.Header{}
 	header.Add("Authorization", AuthHeader)

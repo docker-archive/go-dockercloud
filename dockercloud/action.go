@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/docker/go-dockercloud/utils"
 	"github.com/gorilla/websocket"
 )
 
@@ -83,7 +84,7 @@ func (self *Action) GetLogs(c chan Logs) {
 
 	endpoint := "audit/" + auditSubsystemVersion + "/action/" + self.Uuid + "/logs/?user=" + User + "&token=" + ApiKey
 
-	url := StreamUrl + endpoint
+	url := utils.JoinURL(StreamUrl, endpoint, false)
 
 	header := http.Header{}
 	header.Add("User-Agent", customUserAgent)
