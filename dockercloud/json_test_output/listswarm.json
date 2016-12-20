@@ -1,0 +1,22 @@
+{
+	"meta": {
+		"limit": 25,
+		"next": null,
+		"offset": 0,
+		"previous": null,
+		"total_count": 1
+	},
+	"objects": [{
+		"client_id": "1234abcd-1234-5678-9123-abcd1234",
+		"client_secret": "1234abcd-1234-5678-9123-abcd1234",
+		"internal_endpoint": "192.168.99.100",
+		"name": "myswarm",
+		"namespace": "test",
+		"nickname": "myswarm",
+		"public_endpoint": "abcdefg123456789hijklmnop.test.docker.cloud",
+		"resource_uri": "/api/infra/v1/test/swarm/abcdefg123456789hijklmnop/",
+		"state": "Deployed",
+		"swarm_id": "abcdefg123456789hijklmnop",
+		"version": "1.25"
+	}]
+}

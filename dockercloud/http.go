@@ -72,5 +72,6 @@ func DockerCloudCall(url string, requestType string, requestBody []byte) ([]byte
 	if Debug == true {
 		log.Printf("res: %s", string(data))
 	}
+
 	return data, nil
 }
