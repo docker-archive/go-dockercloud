@@ -66,11 +66,7 @@ func DockerCloudCall(url string, requestType string, requestBody []byte) ([]byte
 	}
 
 	if response.StatusCode > 300 {
-		if Debug == true {
-			return nil, HttpError{Status: response.Status, StatusCode: response.StatusCode, Message: data}
-		}
-
-		return nil, HttpError{Status: response.Status, StatusCode: response.StatusCode}
+		return nil, HttpError{Status: response.Status, StatusCode: response.StatusCode, Message: data}
 	}
 
 	if Debug == true {
