@@ -57,16 +57,20 @@ func DockerCloudCall(url string, requestType string, requestBody []byte) ([]byte
 		return nil, err
 	}
 
-	if response.StatusCode > 300 {
-		return nil, HttpError{Status: response.Status, StatusCode: response.StatusCode}
-	}
-
 	DCJar.SetCookies(req.URL, response.Cookies())
 
 	data, err := ioutil.ReadAll(response.Body)
 
 	if err != nil {
 		return nil, err
+	}
+
+	if response.StatusCode > 300 {
+		if Debug == true {
+			return nil, HttpError{Status: response.Status, StatusCode: response.StatusCode, Message: data}
+		}
+
+		return nil, HttpError{Status: response.Status, StatusCode: response.StatusCode}
 	}
 
 	if Debug == true {
