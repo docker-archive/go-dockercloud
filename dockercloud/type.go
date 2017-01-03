@@ -496,6 +496,11 @@ type SwarmCreateRequest struct {
 	SshKey              string `json:"ssh_key"`
 }
 
+type SwarmUpdateRequest struct {
+	Nickname         string `json:"nickname"`
+	InternalEndpoint string `json:"internal_endpoint"`
+}
+
 type SwarmProviderOptions struct {
 	Name   string
 	Region string

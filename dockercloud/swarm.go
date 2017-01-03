@@ -116,3 +116,48 @@ func CreateSwarm(createRequest SwarmCreateRequest, provider SwarmProviderOptions
 	return response, nil
 
 }
+
+func (self *Swarm) Update(updateRequest SwarmUpdateRequest) error {
+	url := ""
+	if Namespace != "" {
+		url = "infra/" + infraSubsytemVersion + "/" + Namespace + "/swarm/" + self.SwarmID + "/"
+	} else {
+		url = "infra/" + infraSubsytemVersion + "/swarm/" + self.SwarmID + "/"
+	}
+
+	request := "PATCH"
+
+	updatedSwarm, err := json.Marshal(updateRequest)
+	if err != nil {
+		return err
+	}
+
+	_, err = DockerCloudCall(url, request, updatedSwarm)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (self *Swarm) Unregister() error {
+	url := ""
+	if Namespace != "" {
+		url = "infra/" + infraSubsytemVersion + "/" + Namespace + "/swarm/" + self.SwarmID + "/"
+	} else {
+		url = "infra/" + infraSubsytemVersion + "/swarm/" + self.SwarmID + "/"
+	}
+
+	request := "DELETE"
+
+	//Empty Body Request
+	body := []byte(`{}`)
+
+	_, err := DockerCloudCall(url, request, body)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}
