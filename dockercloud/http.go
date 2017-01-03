@@ -53,6 +53,8 @@ func DockerCloudCall(url string, requestType string, requestBody []byte) ([]byte
 
 	response, err := client.Do(req)
 
+	data, err := ioutil.ReadAll(response.Body)
+
 	if err != nil {
 		return nil, err
 	}
@@ -63,8 +65,6 @@ func DockerCloudCall(url string, requestType string, requestBody []byte) ([]byte
 
 	DCJar.SetCookies(req.URL, response.Cookies())
 
-	data, err := ioutil.ReadAll(response.Body)
-
 	if err != nil {
 		return nil, err
 	}
@@ -72,5 +72,6 @@ func DockerCloudCall(url string, requestType string, requestBody []byte) ([]byte
 	if Debug == true {
 		log.Printf("res: %s", string(data))
 	}
+
 	return data, nil
 }

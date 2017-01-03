@@ -19,6 +19,7 @@ var (
 	fake_uuid_nodecluster = "72a7902a-5f70-4771-bcbf-4abb3a4f93fe"
 	fake_uuid_service     = "02522970-a79a-46d6-8a64-475bf52e4258"
 	fake_uuid_stack       = "09cbcf8d-a727-40d9-b420-c8e18b7fa55b"
+	fake_uuid_swarm       = "abcdefg123456789hijklmnop"
 	fake_uuid_volume      = "1863e34d-6a7d-4945-aefc-8f27a4ab1a9e"
 	fake_uuid_volumegroup = "1863e34d-6a7d-4945-aefc-8f27a4ab1a9e"
 	fake_image_name       = "tutum/mysql"

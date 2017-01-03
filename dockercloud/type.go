@@ -469,6 +469,43 @@ type StackCreateRequest struct {
 	Services []ServiceCreateRequest `json:"services,omitempty"`
 }
 
+type SwarmListResponse struct {
+	Meta    Meta    `json:"meta"`
+	Objects []Swarm `json:"objects"`
+}
+
+type Swarm struct {
+	ClientID         string `json:"client_id"`
+	ClientSecret     string `json:"client_secret"`
+	InternalEndpoint string `json:"internal_endpoint"`
+	Name             string `json:"name"`
+	Nickname         string `json:"nickname"`
+	PublicEndpoint   string `json:"public_endpoint"`
+	Resource_uri     string `json:"resource_uri"`
+	State            string `json:"state"`
+	SwarmID          string `json:"swarm_id"`
+	Version          string `json:"version"`
+}
+
+type SwarmCreateRequest struct {
+	Name                string `json:"name"`
+	NumberOfManagers    int    `json:"number_of_managers"`
+	NumberOfWorkers     int    `json:"number_of_workers"`
+	ManagerInstanceType string `json:"manager_instance_type,omitempty"`
+	WorkerInstanceType  string `json:"worker_instance_type,omitempty"`
+	SshKey              string `json:"ssh_key"`
+}
+
+type SwarmUpdateRequest struct {
+	Nickname         string `json:"nickname"`
+	InternalEndpoint string `json:"internal_endpoint"`
+}
+
+type SwarmProviderOptions struct {
+	Name   string
+	Region string
+}
+
 type Token struct {
 	Token string `json:"token"`
 }

@@ -1,4 +1,4 @@
-# go-docker-cloud
+# go-dockercloud
 ========
 
 Go library for Dockercloud's API. Full documentation available at [https://docs.docker.com/apidocs/docker-cloud/](https://docs.docker.com/apidocs/docker-cloud/)
